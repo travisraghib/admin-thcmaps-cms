@@ -1,0 +1,19 @@
+{
+    "serverConfig": {
+        "port": 5000,
+        "workerCount": 0
+    },
+    "db" : {
+        "mongo" : "mongodb://travisraghib:Natalie123@ds045330-a0.mongolab.com:45330,ds045330-a1.mongolab.com:45330/thcmaps-prod"
+    },
+    "logging": {
+        "showInConsole": false,
+        "exitOnError": true,
+        "level": "info",
+        "maxFileSize": 24000000,
+        "directory_path": "",
+        "application_log": "application.log",
+        "payload_log": "payload.log",
+        "call_timing_log": "callTiming.log"
+    }
+}

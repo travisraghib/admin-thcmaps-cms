@@ -1,0 +1,53 @@
+.row.menu-item-form.form-horizontal
+    .col-xs-12(ng-hide='menuForm.show')
+        button.close(type='button', aria-label='Close' ng-click='menuForm.show=true')
+            span(aria-hidden='true') {{menuForm.label}}
+    .col-xs-12(ng-show='menuForm.show')
+        h3.pull-left {{menuForm.label}}
+        button.btn.btn-success.ml-20.mt-20(type='file', ngf-select='menuForm.storeFile($file, $invalidFiles)', accept='image/*', ngf-max-height='1000', ngf-max-size='1MB') Select Image
+        p.file-name {{menuForm.file.name}}
+        p.upload-error.text-danger {{menuForm.error.$error}}
+        .form-group.mt-20
+            label.col-sm-3.text-right Product Type
+            .col-sm-9
+                select.form-control(ng-model='menuForm.model.category_name')
+                    option(ng-repeat='category in main.menuItemCategories' ng-value='category') {{category}}
+        .form-group.mt-20
+            label.col-sm-3.text-right Product Name
+            .col-sm-9
+                input.form-control(ng-model='menuForm.model.name')
+        .form-group.mt-20
+            label.col-sm-3.text-right Product Description
+            .col-sm-9
+                textarea.form-control(ng-model='menuForm.model.body')
+        .form-group.mt-20
+            label.col-sm-3.text-right Price per unit
+            .col-sm-3
+                input.form-control(ng-model='menuForm.model.prices.unit')
+        .form-group.mt-20
+            label.col-sm-3.text-right Price per half gram
+            .col-sm-3
+                input.form-control(ng-model='menuForm.model.prices.half_gram')
+        .form-group.mt-20
+            label.col-sm-3.text-right Price per gram
+            .col-sm-3
+                input.form-control(ng-model='menuForm.model.prices.gram')
+        .form-group.mt-20
+            label.col-sm-3.text-right Price per eight
+            .col-sm-3
+                input.form-control(ng-model='menuForm.model.prices.eighth')
+        .form-group.mt-20
+            label.col-sm-3.text-right Price per quarter
+            .col-sm-3
+                input.form-control(ng-model='menuForm.model.prices.quarter')
+        .form-group.mt-20
+            label.col-sm-3.text-right Price per half ounce
+            .col-sm-3
+                input.form-control(ng-model='menuForm.model.prices.half_ounce')
+        .form-group.mt-20
+            label.col-sm-3.text-right Price per ounce
+            .col-sm-3
+                input.form-control(ng-model='menuForm.model.prices.ounce')
+        .form-group-.mt-20
+            button.btn.btn-primary(ng-click='menuForm.saveImage()') Save
+            button.btn.btn-danger(ng-click='menuForm.cancel()') Cancel

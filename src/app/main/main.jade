@@ -1,0 +1,149 @@
+.container
+    navbar
+    uib-tabset.pt-40.mt-40.col-xs-12.col-md-6.col-md-offset-3
+        uib-tab(heading='Menu' active='true')
+            menu-tab(data='main.menu' template='main.menuItemTemplate')
+        uib-tab(heading='Facility')
+            .row.mt-20
+                .col-xs-12.ml-20
+                    .checkbox
+                        label
+                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.pageInfo.eighteen_plus')
+                            | 18 +
+                    .checkbox
+                        label
+                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.pageInfo.twenty_one_plus')
+                            | 21 +
+                    .checkbox
+                        label
+                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.pageInfo.has_handicap_access')
+                            | Handicap Accessible
+                    .checkbox
+                        label
+                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.pageInfo.has_lounge')
+                            | Lounge availabe
+                    .checkbox
+                        label
+                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.pageInfo.has_security_guard')
+                            | Security Guard onsite
+                    .checkbox
+                        label
+                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.pageInfo.has_testing')
+                            | Tested products available
+                    .checkbox
+                        label
+                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.pageInfo.accepts_credit_cards')
+                            | Accept Credit Cards
+                    a(ng-click='main.editAmmenities()' ng-hide='main.ammenitiesRevertData') edit
+                    button.btn.btn-primary(ng-click='main.updateAmmenities()' ng-show='main.ammenitiesRevertData') Save
+                    button.btn.btn-danger(ng-click='main.cancelEditAmmenities()' ng-show='main.ammenitiesRevertData') Cancel
+        uib-tab(heading='General')
+            .row.mt-20
+                .col-xs-12
+                    img.mb-10.block(ng-src='{{main.pageInfo.avatar_url}}')
+                    a(ng-click='main.editing = "avatar"' ng-hide='main.editing === "avatar"') edit
+                .row(ng-show='main.editing === "avatar"')
+                    .col-xs-12.pa-20
+                        button.btn.btn-success(type='file', ngf-select='main.onAvatarFileSelect($file, $invalidFiles)', accept='image/*', ngf-max-height='1000', ngf-max-size='1MB') Select File
+                        button.btn.btn-danger.ml-10(ng-click='main.editing = ""') Cancel
+                        .alert.alert-danger.mt-10(role='alert' ng-if='main.avatarError')  {{main.avatarError.$error}}
+                        p.text-danger.mt-10(ng-if='main.avatarErrorMsg') {{main.avatarErrorMsg.$error}}
+                        .progress-striped.active.mt-10(uib-progressbar value='main.avatarProgress' ng-show='main.uploadingAvatar')
+            hr
+            .row
+                .col-xs-12
+                    //-img(ng-src='{{main.pageInfo.avatar_url}}')
+                    h2(ng-hide='main.editing === "name"') {{main.pageInfo.name}}
+                    a(ng-hide='main.editing === "name"' ng-click='main.editing = "{{main.pageInfo.name}}"') edit
+                    .form-group.mt-20(ng-show='main.editing === "{{main.pageInfo.name}}"')
+                        label Vendor Name
+                        input.form-control(ng-model='main.pageInfo.name')
+                        .row.mt-20
+                            .col-xs-12
+                        button.btn.btn-primary(ng-click='main.updateName(main.pageInfo.name)') Save
+                        button.btn.btn-danger(ng-click='main.editing = ""') Cancel
+            hr
+            .row
+                .col-xs-12
+                    h4 Vendor Type:
+                        strong.text-capitalize.ml-10() {{main.type}}
+                    .form-group(ng-show='main.editing === "{{main.type}}"')
+                        .radio(ng-show='main.editing === "{{main.type}}"')
+                            label
+                                input(type='radio' name='type' value='dispensary' ng-model='main.type')
+                                | Dispensary
+                        .radio.mb-20(ng-show='main.editing === "{{main.type}}"')
+                            label
+                                input(type='radio' name='type' value='delivery' ng-model='main.type')
+                                | Delivery
+                        button.btn.btn-primary(ng-click='main.updateType()') Save
+                        button.btn.btn-danger(ng-click='main.cancelEditType()') Cancel
+
+                    a(ng-hide='main.editing === "type"' ng-click='main.editing = "{{main.type}}"') edit
+            hr
+            .row
+                .col-xs-12
+                    .address(ng-hide='main.addressRevertData')
+                        h4 Contact Information:
+                        hr
+                        h5 Address:
+                        p {{main.pageInfo.address}}
+                        p {{main.pageInfo.city}}, {{main.pageInfo.state}} {{main.pageInfo.zip_code}}
+                        h5.mt-20 Phone Number:
+                        p {{main.pageInfo.phone_number}}
+                        a(ng-click='main.editAddress()') edit
+
+                    .address-form(ng-show='main.addressRevertData')
+                        .form-group
+                            label Address
+                            input.form-control(ng-model='main.pageInfo.address')
+                        .form-group
+                            label City
+                            input.form-control(ng-model='main.pageInfo.city')
+                        .form-group
+                            label State
+                            input.form-control(ng-model='main.pageInfo.state')
+                        .form-group
+                            label Zip Code
+                            input.form-control(ng-model='main.pageInfo.zip_code')
+                        .form-group
+                            label Phone Number
+                            input.form-control(ng-model='main.pageInfo.phone_number')
+                        button.btn.btn-primary(ng-click='main.updateAddress()') Save
+                        button.btn.btn-danger(ng-click='main.cancelEditAddress()') Cancel
+            hr
+            .row
+                .col-xs-12
+                    h4 Business Hours:
+                        span.ml-10.glyphicon.glyphicon-question-sign(uib-tooltip='Click on any time below to edit it')
+                    .hours
+                        .day(ng-repeat='day in main.pageInfo.hours')
+                            .row
+                                .col-xs-2.small {{day.day_of_the_week | uppercase}}
+                                a.col-xs-5.br.text-center(ng-click='main.editHours("open",day)' ng-show='day.closed') CLOSED
+                                a.col-xs-5.br.text-center(ng-click='main.editHours("close",day)' ng-show='day.closed') CLOSED
+                                a.col-xs-5.br.text-center(ng-click='main.editHours("open",day)' ng-hide='day.closed') {{day.open | date:'shortTime'}}
+                                a.col-xs-5.text-center(ng-click='main.editHours("close", day)' ng-hide='day.closed') {{day.close | date:'shortTime'}}
+                            .row(ng-if='main.hoursRevertData && main.hoursRevertData.day_order === day.day_order')
+                                hr
+                                .col-xs-12.mt-10
+                                    p.mb-10
+                                        strong {{day.when | uppercase}} TIME
+                                    uib-timepicker.ma-0(ng-show='day.when === "open"' ng-model='day.open')
+                                    uib-timepicker(ng-show='day.when === "close"' ng-model='day.close')
+                                    button.mt-10.btn.btn-primary(ng-click='main.updateHours(day)') Save
+                                    button.mt-10.btn.btn-danger(ng-click='main.cancelEditHours(day)') Cancel
+                                    button.mt-10.btn.btn-warning(ng-click='main.updateHours(day, true)') Closed on {{day.day_of_the_week | uppercase}}
+
+                            hr
+
+
+
+
+
+
+
+
+
+
+

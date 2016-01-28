@@ -1,0 +1,25 @@
+.row
+    .col-xs-12
+        .row
+            .col-xs-12.mt-20
+                menu-item-form(model='menu.template' label='"add menu item"')
+        .row.mt-20(ng-repeat='category in menu.data')
+            .col-xs-12
+                h3.ma-15.category {{category.title}}
+                    button.close.small(ng-hide='category.items.length' ng-click='menu.deleteItem(category._id)') delete category
+                    hr
+                .col-xs-12.item(ng-repeat='item in category.items')
+                    .item.well.mb-30
+                        menu-item-form(model='item' label='"edit item"')
+                        button.close(ng-click='menu.deleteItem(item._id)') delete
+                        img.media-object(ng-if='item.thumb_image_url || item.image_url' err-src='https://s3-us-west-1.amazonaws.com/thcmaps/assets/fpo.png' ng-src='{{item.thumb_image_url || item.image_url}}')
+                        img.media-object(ng-if='!item.image_url && !item.thumb_image_ur' src='https://s3-us-west-1.amazonaws.com/thcmaps/assets/fpo.png')
+                        .name.mt-10 {{item.name}}
+                        .description(ng-show='item.isShowing') {{item.body}}
+                        .prices
+                            .row
+                                .col-xs-4.mt-10.price-container(ng-repeat='(unit, price) in item.prices' ng-if='price')
+                                    .small.unit <sup>{{unit | uppercase}}</sup>
+                                    .small.price {{price | currency:"$"}}
+
+

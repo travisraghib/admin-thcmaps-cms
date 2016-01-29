@@ -8,7 +8,10 @@ export function routerConfig($stateProvider, $urlRouterProvider) {
             controllerAs: 'login'
         })
         .state('select', {
-            url : '/select'
+            url : '/select',
+            templateUrl : 'app/select/select.html',
+            controller  : 'SelectController',
+            controllerAs: 'select'
         })
         .state('main', {
             url         : '/manage/:id',

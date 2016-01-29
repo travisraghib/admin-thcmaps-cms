@@ -5,6 +5,7 @@ import { routerConfig } from './index.route';
 import { runBlock } from './index.run';
 import { MainController } from './main/main.controller';
 import { LoginController } from './login/login.controller';
+import { SelectController } from './select/select.controller';
 import { NavbarDirective } from './components/navbar/navbar.directive';
 import { MenuTabDirective } from './components/menuTab/menuTab.directive';
 import { MenuItemFormDirective  } from './components/menuTab/menuItemForm/menuItemForm.directive';
@@ -12,8 +13,8 @@ import { vendorDataService } from './components/vendorData/vendorData.service';
 import { authDataService } from './components/authData/authData.service';
 import { sessionStorageService } from './components/sessionStorage/sessionStorage.service';
 import { tokenService  } from './components/token/token.service';
-import { interceptorService  } from './components/interceptor/inteceptor.service';
-import { interceptor  } from './components/interceptor/inteceptor';
+import { interceptorService  } from './components/interceptor/interceptor.service';
+import { interceptor  } from './components/interceptor/interceptor';
 import { constants } from './index.constants';
 
 angular.module('thcmaps-cms', ['ngAnimate', 'ngFileUpload', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngMessages',
@@ -30,6 +31,7 @@ angular.module('thcmaps-cms', ['ngAnimate', 'ngFileUpload', 'ngCookies', 'ngTouc
     .service('vendorDataService', vendorDataService)
     .service('authDataService', authDataService)
     .service('interceptor', interceptor)
+    .controller('SelectController', SelectController)
     .controller('LoginController', LoginController)
     .controller('MainController', MainController)
     .directive('navbar', NavbarDirective)

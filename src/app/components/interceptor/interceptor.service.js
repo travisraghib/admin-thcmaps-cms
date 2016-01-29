@@ -1,9 +1,8 @@
 export class interceptorService {
     constructor(tokenService){
         'ngInject';
-        //dependancies
+        //deps
         this.tokenService = tokenService;
-        console.log(tokenService)
     }
 
     generateInterceptor() {

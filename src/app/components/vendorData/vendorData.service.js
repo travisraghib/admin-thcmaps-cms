@@ -1,5 +1,5 @@
 export class vendorDataService {
-    constructor($log, $http, $resource) {
+    constructor($log, $resource) {
         'ngInject';
 
         this.log = $log.log;

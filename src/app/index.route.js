@@ -1,6 +1,15 @@
 export function routerConfig($stateProvider, $urlRouterProvider) {
     'ngInject';
     $stateProvider
+        .state('login', {
+            url         : '/',
+            templateUrl : 'app/login/login.html',
+            controller  : 'LoginController',
+            controllerAs: 'login'
+        })
+        .state('select', {
+            url : '/select'
+        })
         .state('main', {
             url         : '/manage/:id',
             templateUrl : 'app/main/main.html',
@@ -13,7 +22,7 @@ export function routerConfig($stateProvider, $urlRouterProvider) {
             }
         });
 
-    $urlRouterProvider.otherwise('/manage/deliverygreens-com-la-habra');
+    $urlRouterProvider.otherwise('/');
 
 
 

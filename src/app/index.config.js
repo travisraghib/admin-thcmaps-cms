@@ -1,7 +1,9 @@
-export function config ($logProvider) {
-  'ngInject';
-  // Enable log
-  $logProvider.debugEnabled(true);
+export function config($logProvider, $httpProvider) {
+    'ngInject';
+    // Enable log
+    $logProvider.debugEnabled(true);
 
-  // Set options third-party lib
+    //handle interceptor
+    $httpProvider.interceptors.push('interceptor');
+    $httpProvider.defaults.useXDomain = true;
 }

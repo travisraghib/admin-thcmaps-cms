@@ -1,0 +1,35 @@
+.container.login-page
+    .row.mt-40
+        .col-xs-offset-3.col-xs-6
+            uib-tabset(type='pills')
+                uib-tab(heading='Login')
+                    hr
+                    //h4.text-danger Invalid Credentials
+                    .form-group.mt-20
+                        label Email*
+                        //span.block.text-danger.small Please enter a valid Email address
+                        input.form-control(ng-model='login.model.email' required name='email')
+                    .form-group.mt-20
+                        label Password*
+                        //span.block.text-danger.small(ng-show='login') Minimum Password Length is 10 characters
+                        input.form-control(ng-model='login.model.password' type='password' required name='password')
+                    .pull-right
+                        btn.btn.btn-primary(ng-click='login.login()') LOGIN
+                uib-tab(heading='Create account')
+                    hr
+                    .form-group.mt-20
+                        label Name*
+                        //span.block.text-danger.small Please enter a name
+                        input.form-control(ng-model='login.model.name' required name='name')
+                    //h4.text-danger Invalid Credentials
+                    .form-group.mt-20
+                        label Email*
+                        //span.block.text-danger.small Please enter a valid Email address
+                        input.form-control(ng-model='login.model.email' required name='email')
+                    .form-group.mt-20
+                        label Password*
+                        //span.block.text-danger.small(ng-show='login') Minimum Password Length is 10 characters
+                        input.form-control(ng-model='login.model.password' type='password' required name='password')
+                    .pull-right
+                        btn.btn.btn-danger(ng-click='login.create()') CREATE NEW ACCOUNT
+

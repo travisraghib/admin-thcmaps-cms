@@ -9,6 +9,7 @@ import { SelectController } from './select/select.controller';
 import { NavbarDirective } from './components/navbar/navbar.directive';
 import { MenuTabDirective } from './components/menuTab/menuTab.directive';
 import { MenuItemFormDirective  } from './components/menuTab/menuItemForm/menuItemForm.directive';
+import { MongooseError } from './components/mongooseError/MongooseError.directive';
 import { vendorDataService } from './components/vendorData/vendorData.service';
 import { authDataService } from './components/authData/authData.service';
 import { sessionStorageService } from './components/sessionStorage/sessionStorage.service';
@@ -36,4 +37,5 @@ angular.module('thcmaps-cms', ['ngAnimate', 'ngFileUpload', 'ngCookies', 'ngTouc
     .controller('MainController', MainController)
     .directive('navbar', NavbarDirective)
     .directive('menuTab', MenuTabDirective)
+    .directive('mongooseError', MongooseError)
     .directive('menuItemForm', MenuItemFormDirective);

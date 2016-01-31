@@ -1,17 +1,45 @@
 export class interceptorService {
-    constructor(tokenService){
+    constructor($rootScope, $q, $cookies, $injector, $log, util) {
         'ngInject';
-        //deps
-        this.tokenService = tokenService;
-    }
+        //debug
+        this.log = $log.log;
+        this.log($cookies.get('token'));
 
-    generateInterceptor() {
-        let tokenService = this.tokenService;
-        return {
-            request: function(config) {
-                config.headers.token = tokenService.getToken();
-                return config;
+        //deps
+        this.$rootScope = $rootScope;
+        this.$q = $q;
+        this.$cookies = $cookies;
+        this.$injector = $injector;
+        this.util = util;
+
+        //private
+        this.state = null;
+
+        // Add authorization token to headers
+        this.request = function(config) {
+            config.headers = config.headers || {};
+
+            if($cookies.get('token')) {
+                config.headers.Authorization = 'Bearer ' + $cookies.get('token');
             }
+
+            return config;
+        };
+
+        // Intercept 401s and redirect you to login
+        this.responseError = function(response) {
+            if(response.status === 401) {
+                (this.state || (this.state = $injector.get('$state'))).go('login');
+                // remove any stale tokens
+                $cookies.remove('token');
+            }
+
+            return $q.reject(response);
         };
     }
+
+
+
+
+
 }

@@ -1,4 +1,4 @@
-export function MongooseError() {
+export function MongooseErrorDirective() {
     'ngInject';
 
     let directive = {

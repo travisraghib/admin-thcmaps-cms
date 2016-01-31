@@ -4,6 +4,6 @@ export function config($logProvider, $httpProvider) {
     $logProvider.debugEnabled(true);
 
     //handle interceptor
-    $httpProvider.interceptors.push('interceptor');
-    $httpProvider.defaults.useXDomain = true;
+    $httpProvider.interceptors.push('interceptorService');
+    //$httpProvider.defaults.useXDomain = true;
 }

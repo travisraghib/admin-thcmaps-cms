@@ -1,14 +1,43 @@
 export class vendorDataService {
-    constructor($log, $resource) {
+    constructor($log, $resource, sessionStorageService) {
         'ngInject';
 
+        //debug
         this.log = $log.log;
         this.error = $log.error;
+
+        //deps
+        this.sessionStorageService = sessionStorageService;
+
+        //resources
         this.vendorResource = $resource('api/vendor/:vendor');
         this.vendorUpdateResource = $resource('api/vendor/:vendor', null, {update: {method: 'PUT'}});
 
-        this.menuResource = $resource('api/menu/:vendor/:itemId');
-        this.menuUpdateResource = $resource('api/menu/:vendor', null, {update: {method: 'PUT'}});
+        this.menuResource = $resource('api/vendor/menu/:vendor/:itemId');
+        this.menuUpdateResource = $resource('api/vendor/menu/:vendor', null, {update: {method: 'PUT'}});
+
+        this.businessResource = $resource('api/user/business');
+
+        this.business = this.getBusiness();
+    }
+
+    //cache business array
+    setBusiness (data){
+        this.sessionStorageService.setData('business', data);
+        this.business = data;
+    }
+
+    //get cached business array
+    getBusiness (){
+        return this.sessionStorageService.getData('business') || [];
+    }
+
+    addBusiness (){
+        let data = {
+            time : new Date()
+        };
+
+        return this.businessResource.save(data);
     }
 
     //update menu data

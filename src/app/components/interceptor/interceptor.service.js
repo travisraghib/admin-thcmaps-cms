@@ -3,7 +3,6 @@ export class interceptorService {
         'ngInject';
         //debug
         this.log = $log.log;
-        this.log($cookies.get('token'));
 
         //deps
         this.$rootScope = $rootScope;

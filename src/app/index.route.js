@@ -11,7 +11,12 @@ export function routerConfig($stateProvider, $urlRouterProvider) {
             url : '/select',
             templateUrl : 'app/select/select.html',
             controller  : 'SelectController',
-            controllerAs: 'select'
+            controllerAs: 'select',
+            resolve     : {
+                vendorList: (vendorDataService) =>{
+                    return vendorDataService.getVendorList()
+                }
+            }
         })
         .state('main', {
             url         : '/manage/:id',

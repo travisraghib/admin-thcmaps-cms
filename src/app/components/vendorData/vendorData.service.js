@@ -1,5 +1,5 @@
 export class vendorDataService {
-    constructor($log, $resource, sessionStorageService) {
+    constructor($log, $resource, $q, sessionStorageService) {
         'ngInject';
 
         //debug
@@ -7,6 +7,7 @@ export class vendorDataService {
         this.error = $log.error;
 
         //deps
+        this.$q = $q;
         this.sessionStorageService = sessionStorageService;
 
         //resources
@@ -16,9 +17,28 @@ export class vendorDataService {
         this.menuResource = $resource('api/vendor/menu/:vendor/:itemId');
         this.menuUpdateResource = $resource('api/vendor/menu/:vendor', null, {update: {method: 'PUT'}});
 
-        this.businessResource = $resource('api/user/business');
+        this.businessResource = $resource('api/user/business/:id');
 
         this.business = this.getBusiness();
+    }
+    //get cached business array
+    getVendorList (){
+        let vendorList = this.sessionStorageService.getData('business');
+
+        if(!vendorList.length) {
+            return [];
+        }
+
+        return this.vendorResource.query({vendorList}).$promise
+            .then(data => {
+                console.log(data);
+                return data;
+            })
+            .catch((error) => {
+                this.error('XHR Failed for getVendorList.\n' + angular.toJson(error.data, true));
+                return error;
+            });
+
     }
 
     //cache business array
@@ -28,16 +48,41 @@ export class vendorDataService {
     }
 
     //get cached business array
-    getBusiness (){
+    getBusiness (data){
         return this.sessionStorageService.getData('business') || [];
     }
 
+    //add a business method
     addBusiness (){
-        let data = {
-            time : new Date()
-        };
+        return this.businessResource.save().$promise
+            .then(res =>{
+                this.business.unshift(res._id);
+                this.setBusiness(this.business);
+                return res;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
 
-        return this.businessResource.save(data);
+    deleteBusiness(id){
+        if(!id){
+            return;
+        }
+
+        let userPromise = this.businessResource.delete({id}).$promise,
+            vendorPromise = this.vendorResource.delete({vendor : id}).$promise,
+            defer = this.$q.defer();
+        this.$q.all([userPromise, vendorPromise])
+            .then(data =>{
+                defer.resolve(data[0].business);
+            })
+            .catch(error =>{
+                defer.reject(error);
+            });
+
+        return defer.promise;
+
     }
 
     //update menu data
@@ -60,7 +105,8 @@ export class vendorDataService {
                 return response;
             })
             .catch((error) => {
-                this.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+                this.error('XHR Failed for getVendor.\n' + angular.toJson(error.data, true));
+                return error;
             });
     }
 }

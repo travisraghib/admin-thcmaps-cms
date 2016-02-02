@@ -25,13 +25,11 @@ export class LoginController {
                 this.log(res);
             }, (error)=>{
                 this.log(error)
-            })
-        this.log(this.model);
+            });
     }
 
     //login ui interaction
     login () {
-
         let data = angular.copy(this.model);
 
         this.authDataService.loginAccount(data)
@@ -39,8 +37,7 @@ export class LoginController {
             this.log(res);
         }, (error)=>{
             this.log(error)
-        })
-
-        this.log(this.model);
+        });
     }
+
 }

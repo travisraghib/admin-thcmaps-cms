@@ -8,4 +8,10 @@
                     button.close(type='button' ng-click='select.addBusiness()') Add a business
             .row
                 .col-xs-12
-                    hr
+                    .row.mb-10(ng-repeat='vendor in select.vendorList')
+                        hr
+                        .col-xs-4
+                            a(ui-sref='main({id : vendor._id})') {{vendor.pageInfo.name || "New"}}
+                        .col-xs-4 {{vendor._type}}
+                        .col-xs-4
+                            button.close.small(type='button' ng-click='select.deleteBusiness(vendor._id)') delete

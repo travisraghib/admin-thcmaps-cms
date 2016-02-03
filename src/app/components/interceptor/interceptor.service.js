@@ -12,7 +12,7 @@ export class interceptorService {
         this.util = util;
 
         //private
-        this.state = null;
+        let state = null;
 
         // Add authorization token to headers
         this.request = function(config) {
@@ -27,9 +27,12 @@ export class interceptorService {
 
         // Intercept 401s and redirect you to login
         this.responseError = function(response) {
+            console.log(30)
             if(response.status === 401) {
-                (this.state || (this.state = $injector.get('$state'))).go('login');
+                console.log(32);
+                (state || (state = $injector.get('$state'))).go('login');
                 // remove any stale tokens
+                console.log(35);
                 $cookies.remove('token');
             }
 

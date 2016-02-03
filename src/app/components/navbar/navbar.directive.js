@@ -18,19 +18,17 @@ export function NavbarDirective() {
 class NavbarController {
     constructor(moment, vendorDataService) {
         'ngInject';
-        var vendor = vendorDataService.data.pageInfo,
-            type   = vendorDataService.data._type;
+        var vendor = vendorDataService.data,
+            type   = vendorDataService.data._type,
+            lastUpdate = new Date(vendor.updated_at);
 
-        // "this.creation" is available by directive option "bindToController: true"
         //handle vendor name
         this.slug = vendor.slug;
         //vendor type
         this.type = type;
         //last update
-        this.lastUpdate = moment(vendor.updated_at).format('MM/DD/YYYY h:mm A')
+        this.lastUpdate = new moment(lastUpdate).format('MM/DD/YYYY h:mm A');
         //menu collapsed
         this.isCollapsed = true;
-
-
     }
 }

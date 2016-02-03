@@ -1,30 +1,22 @@
 export function runBlock($rootScope, $state, authDataService, _) {
     'ngInject';
-    $rootScope.$on('$stateChangeStart', function(event, next) { //eslint-disable-line no-use-before-define
-        if(!next.authenticate) {
-            return;
+
+    $rootScope.$on('$stateChangeStart', (event, next) => {
+
+        //handle proper routing based on login state
+        let authStatus = authDataService.authStatus();
+
+        //go to select page if if user goes to login page after beign loged in
+        if(next.name === 'login' && authStatus){
+            event.preventDefault();
+            $state.go('select');
         }
 
-        if(angular.isString(next.authenticate)) {
-            auth.hasRole(next.authenticate, _.noop).then(has => {
-                if(has) {
-                    return;
-                }
-
-                event.preventDefault();
-                return auth.isLoggedIn(_.noop).then(is => {
-                    $state.go(is ? 'main' : 'login');
-                });
-            });
-        } else {
-            auth.isLoggedIn(_.noop).then(is => {
-                if(is) {
-                    return;
-                }
-
-                event.preventDefault();
-                $state.go('main');
-            });
+        //go to login page if session expires
+        if(next.name !== 'login' && !authStatus){
+            event.preventDefault();
+            $state.go('login');
         }
     });
+
 }

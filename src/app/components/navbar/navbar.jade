@@ -7,6 +7,9 @@ nav.navbar.navbar-default.navbar-fixed-top
             a.navbar-brand(href='/')
                 //-img(src='assets/images/thcmaps.png')
         .collapse.navbar-collapse(uib-collapse='nav.isCollapsed')
+            ul.nav.navbar-nav.navbar-left
+                li
+                    a(ui-sref='select') Back
             ul.nav.navbar-nav.navbar-right
                 li
                     a {{nav.lastUpdate}}

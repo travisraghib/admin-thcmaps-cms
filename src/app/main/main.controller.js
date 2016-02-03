@@ -2,8 +2,7 @@ export class MainController {
     constructor($log, $stateParams, $scope, $timeout, vendorData, vendorDataService, constants, _, moment, Upload) {
         'ngInject';
 
-        var vendor   = vendorData,
-            pageInfo = vendor.pageInfo;
+        var vendor   = vendorData;
 
         //debug
         this.log = $log.log;
@@ -18,7 +17,7 @@ export class MainController {
         this.timeout = $timeout;
 
         //view bound data
-        this.pageInfo = pageInfo;
+        this.vendor = vendor;
         this.type = vendor._type;
         this.menu = vendor.menu;
         this.hours = this.setUpHours();
@@ -49,11 +48,12 @@ export class MainController {
     cancelEditHours() {
         let day = this.hoursRevertData;
         this.hours[day.day_order] = day;
+        this.hoursRevertData = null;
     }
 
     //se    tup editable hours objects
     setUpHours() {
-        this._.each(this.pageInfo.hours, (day) => {
+        this._.each(this.vendor.hours, (day) => {
             //handle no open or close times
             if(!day || !day.opening_time || !day.closing_time) {
                 day.open = new Date();
@@ -81,31 +81,31 @@ export class MainController {
             day.close = close;
 
         }, this);
-        return this.pageInfo.hours;
+        return this.vendor.hours;
     }
 
     //handle edit button for vendor ammenities
     editAmmenities() {
         this.ammenitiesRevertData = {
-            eighteen_plus       : this.pageInfo.eighteen_plus,
-            twenty_one_plus     : this.pageInfo.twenty_one_plus,
-            has_handicap_access : this.pageInfo.has_handicap_access,
-            has_lounge          : this.pageInfo.has_lounge,
-            has_security_guard  : this.pageInfo.has_security_guard,
-            has_testing         : this.pageInfo.has_testing,
-            accepts_credit_cards: this.pageInfo.accepts_credit_cards
+            eighteen_plus       : this.vendor.eighteen_plus,
+            twenty_one_plus     : this.vendor.twenty_one_plus,
+            has_handicap_access : this.vendor.has_handicap_access,
+            has_lounge          : this.vendor.has_lounge,
+            has_security_guard  : this.vendor.has_security_guard,
+            has_testing         : this.vendor.has_testing,
+            accepts_credit_cards: this.vendor.accepts_credit_cards
         };
     }
 
     //handle cancel edit button for vendor ammenities
     cancelEditAmmenities() {
-        this.pageInfo.eighteen_plus = this.ammenitiesRevertData.eighteen_plus;
-        this.pageInfo.twenty_one_plus = this.ammenitiesRevertData.twenty_one_plus;
-        this.pageInfo.has_handicap_access = this.ammenitiesRevertData.has_handicap_access;
-        this.pageInfo.has_lounge = this.ammenitiesRevertData.has_lounge;
-        this.pageInfo.has_security_guard = this.ammenitiesRevertData.has_security_guard;
-        this.pageInfo.has_testing = this.ammenitiesRevertData.has_testing;
-        this.pageInfo.accepts_credit_cards = this.ammenitiesRevertData.accepts_credit_cards;
+        this.vendor.eighteen_plus = this.ammenitiesRevertData.eighteen_plus;
+        this.vendor.twenty_one_plus = this.ammenitiesRevertData.twenty_one_plus;
+        this.vendor.has_handicap_access = this.ammenitiesRevertData.has_handicap_access;
+        this.vendor.has_lounge = this.ammenitiesRevertData.has_lounge;
+        this.vendor.has_security_guard = this.ammenitiesRevertData.has_security_guard;
+        this.vendor.has_testing = this.ammenitiesRevertData.has_testing;
+        this.vendor.accepts_credit_cards = this.ammenitiesRevertData.accepts_credit_cards;
 
         this.ammenitiesRevertData = '';
     }
@@ -113,11 +113,21 @@ export class MainController {
     //handle edit button for address
     editAddress() {
         this.addressRevertData = {
-            address : this.pageInfo.address,
-            state   : this.pageInfo.state,
-            zip_code: this.pageInfo.zip_code,
-            city    : this.pageInfo.city
+            address : this.vendor.address,
+            state   : this.vendor.state,
+            zip_code: this.vendor.zip_code,
+            city    : this.vendor.city
         }
+    }
+
+    //handle cancel edit button for address
+    cancelEditAddress() {
+        this.vendor.address = this.addressRevertData.address;
+        this.vendor.state = this.addressRevertData.state;
+        this.vendor.city = this.addressRevertData.city;
+        this.vendor.zip_code = this.addressRevertData.zip_code;
+
+        this.addressRevertData = '';
     }
 
     //handle avatar file select
@@ -136,8 +146,8 @@ export class MainController {
                     //success
                     file.result = response.data;
                     this.log(response);
-                    this.pageInfo = response.data.pageInfo;
-                    this.pageInfo.hours = this.setUpHours();
+                    this.vendor = response.data;
+                    this.hours = this.setUpHours();
                     this.avatarProgress = 0;
                     this.uploadingAvatar = false;
                     this.editing = ""
@@ -156,19 +166,9 @@ export class MainController {
         }
     }
 
-    //handle cancel edit button for address
-    cancelEditAddress() {
-        this.pageInfo.address = this.addressRevertData.address;
-        this.pageInfo.state = this.addressRevertData.state;
-        this.pageInfo.city = this.addressRevertData.city;
-        this.pageInfo.zip_code = this.addressRevertData.zip_code;
-
-        this.addressRevertData = '';
-    }
-
     //close edit form for page info
     cancelEditPageInfo(field) {
-        this.pageInfo[field] = this.editing;
+        this.vendor[field] = this.editing;
 
         this.editing = '';
     }
@@ -182,7 +182,7 @@ export class MainController {
 
     //update vendor name
     updateName() {
-        let name = {pageInfo: {name: this.pageInfo.name}};
+        let name = {name: this.vendor.name};
         this.update(name);
     }
 
@@ -195,13 +195,11 @@ export class MainController {
     //update vendor address
     updateAddress() {
         let address = {
-            pageInfo: {
-                address     : this.pageInfo.address,
-                city        : this.pageInfo.city,
-                state       : this.pageInfo.state,
-                zip_code    : this.pageInfo.zip_code,
-                phone_number: this.pageInfo.phone_number
-            }
+                address     : this.vendor.address,
+                city        : this.vendor.city,
+                state       : this.vendor.state,
+                zip_code    : this.vendor.zip_code,
+                phone_number: this.vendor.phone_number
         };
         this.update(address)
     }
@@ -223,22 +221,19 @@ export class MainController {
         delete dayData.hours.close;
         delete dayData.hours.closed;
 
-        this.log(dayData);
         this.update(dayData);
     }
 
     //update facility ammenties
     updateAmmenities() {
         let ammenities = {
-            pageInfo: {
-                eighteen_plus       : this.pageInfo.eighteen_plus,
-                twenty_one_plus     : this.pageInfo.twenty_one_plus,
-                has_handicap_access : this.pageInfo.has_handicap_access,
-                has_lounge          : this.pageInfo.has_lounge,
-                has_security_guard  : this.pageInfo.has_security_guard,
-                has_testing         : this.pageInfo.has_testing,
-                accepts_credit_cards: this.pageInfo.accepts_credit_cardsf
-            }
+                eighteen_plus       : this.vendor.eighteen_plus,
+                twenty_one_plus     : this.vendor.twenty_one_plus,
+                has_handicap_access : this.vendor.has_handicap_access,
+                has_lounge          : this.vendor.has_lounge,
+                has_security_guard  : this.vendor.has_security_guard,
+                has_testing         : this.vendor.has_testing,
+                accepts_credit_cards: this.vendor.accepts_credit_cardsf
         };
         this.update(ammenities);
     }
@@ -248,13 +243,14 @@ export class MainController {
         this.vendorDataService.updateVendor(this.id, data)
             .$promise
             .then((data) => {
+                this.log(data);
                 this.editing = '';
                 this.addressRevertData = '';
                 this.hoursRevertData = '';
                 this.ammenitiesRevertData = '';
                 this.menu = data.menu;
-                this.pageInfo = data.pageInfo;
-                this.pageInfo.hours = this.setUpHours()
+                this.vendor = data;
+                this.hours = this.setUpHours()
 
             })
             .catch((error) => {

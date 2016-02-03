@@ -14,7 +14,7 @@ export function routerConfig($stateProvider, $urlRouterProvider) {
             controllerAs: 'select',
             resolve     : {
                 vendorList: (vendorDataService) =>{
-                    return vendorDataService.getVendorList()
+                    return vendorDataService.getVendorList();
                 }
             }
         })

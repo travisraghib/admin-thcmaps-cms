@@ -8,31 +8,31 @@
                 .col-xs-12.ml-20
                     .checkbox
                         label
-                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.pageInfo.eighteen_plus')
+                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.vendor.eighteen_plus')
                             | 18 +
                     .checkbox
                         label
-                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.pageInfo.twenty_one_plus')
+                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.vendor.twenty_one_plus')
                             | 21 +
                     .checkbox
                         label
-                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.pageInfo.has_handicap_access')
+                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.vendor.has_handicap_access')
                             | Handicap Accessible
                     .checkbox
                         label
-                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.pageInfo.has_lounge')
+                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.vendor.has_lounge')
                             | Lounge availabe
                     .checkbox
                         label
-                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.pageInfo.has_security_guard')
+                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.vendor.has_security_guard')
                             | Security Guard onsite
                     .checkbox
                         label
-                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.pageInfo.has_testing')
+                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.vendor.has_testing')
                             | Tested products available
                     .checkbox
                         label
-                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.pageInfo.accepts_credit_cards')
+                            input(type='checkbox' ng-disabled='!main.ammenitiesRevertData' ng-model='main.vendor.accepts_credit_cards')
                             | Accept Credit Cards
                     a(ng-click='main.editAmmenities()' ng-hide='main.ammenitiesRevertData') edit
                     button.btn.btn-primary(ng-click='main.updateAmmenities()' ng-show='main.ammenitiesRevertData') Save
@@ -40,7 +40,8 @@
         uib-tab(heading='General')
             .row.mt-20
                 .col-xs-12
-                    img.mb-10.block(ng-src='{{main.pageInfo.avatar_url}}')
+                    h2 Vendor Avatar Image
+                    img.mb-10.block(ng-src='{{main.vendor.avatar_url}}')
                     a(ng-click='main.editing = "avatar"' ng-hide='main.editing === "avatar"') edit
                 .row(ng-show='main.editing === "avatar"')
                     .col-xs-12.pa-20
@@ -52,15 +53,14 @@
             hr
             .row
                 .col-xs-12
-                    //-img(ng-src='{{main.pageInfo.avatar_url}}')
-                    h2(ng-hide='main.editing === "name"') {{main.pageInfo.name}}
-                    a(ng-hide='main.editing === "name"' ng-click='main.editing = "{{main.pageInfo.name}}"') edit
-                    .form-group.mt-20(ng-show='main.editing === "{{main.pageInfo.name}}"')
+                    h2(ng-hide='main.editing === "name"') {{main.vendor.name}}
+                    a(ng-hide='main.editing === "name"' ng-click='main.editing = "{{main.vendor.name}}"') edit
+                    .form-group.mt-20(ng-show='main.editing === "{{main.vendor.name}}"')
                         label Vendor Name
-                        input.form-control(ng-model='main.pageInfo.name')
+                        input.form-control(ng-model='main.vendor.name')
                         .row.mt-20
                             .col-xs-12
-                        button.btn.btn-primary(ng-click='main.updateName(main.pageInfo.name)') Save
+                        button.btn.btn-primary(ng-click='main.updateName(main.vendor.name)') Save
                         button.btn.btn-danger(ng-click='main.editing = ""') Cancel
             hr
             .row
@@ -87,28 +87,28 @@
                         h4 Contact Information:
                         hr
                         h5 Address:
-                        p {{main.pageInfo.address}}
-                        p {{main.pageInfo.city}}, {{main.pageInfo.state}} {{main.pageInfo.zip_code}}
+                        p {{main.vendor.address}}
+                        p {{main.vendor.city}}, {{main.vendor.state}} {{main.vendor.zip_code}}
                         h5.mt-20 Phone Number:
-                        p {{main.pageInfo.phone_number}}
+                        p {{main.vendor.phone_number}}
                         a(ng-click='main.editAddress()') edit
 
                     .address-form(ng-show='main.addressRevertData')
                         .form-group
                             label Address
-                            input.form-control(ng-model='main.pageInfo.address')
+                            input.form-control(ng-model='main.vendor.address')
                         .form-group
                             label City
-                            input.form-control(ng-model='main.pageInfo.city')
+                            input.form-control(ng-model='main.vendor.city')
                         .form-group
                             label State
-                            input.form-control(ng-model='main.pageInfo.state')
+                            input.form-control(ng-model='main.vendor.state')
                         .form-group
                             label Zip Code
-                            input.form-control(ng-model='main.pageInfo.zip_code')
+                            input.form-control(ng-model='main.vendor.zip_code')
                         .form-group
                             label Phone Number
-                            input.form-control(ng-model='main.pageInfo.phone_number')
+                            input.form-control(ng-model='main.vendor.phone_number')
                         button.btn.btn-primary(ng-click='main.updateAddress()') Save
                         button.btn.btn-danger(ng-click='main.cancelEditAddress()') Cancel
             hr
@@ -117,14 +117,14 @@
                     h4 Business Hours:
                         span.ml-10.glyphicon.glyphicon-question-sign(uib-tooltip='Click on any time below to edit it')
                     .hours
-                        .day(ng-repeat='day in main.pageInfo.hours')
+                        .day(ng-repeat='day in main.vendor.hours')
                             .row
                                 .col-xs-2.small {{day.day_of_the_week | uppercase}}
                                 a.col-xs-5.br.text-center(ng-click='main.editHours("open",day)' ng-show='day.closed') CLOSED
                                 a.col-xs-5.br.text-center(ng-click='main.editHours("close",day)' ng-show='day.closed') CLOSED
                                 a.col-xs-5.br.text-center(ng-click='main.editHours("open",day)' ng-hide='day.closed') {{day.open | date:'shortTime'}}
                                 a.col-xs-5.text-center(ng-click='main.editHours("close", day)' ng-hide='day.closed') {{day.close | date:'shortTime'}}
-                            .row(ng-if='main.hoursRevertData && main.hoursRevertData.day_order === day.day_order')
+                            .row(ng-show='main.hoursRevertData && main.hoursRevertData.day_order === day.day_order')
                                 hr
                                 .col-xs-12.mt-10
                                     p.mb-10
@@ -134,7 +134,6 @@
                                     button.mt-10.btn.btn-primary(ng-click='main.updateHours(day)') Save
                                     button.mt-10.btn.btn-danger(ng-click='main.cancelEditHours(day)') Cancel
                                     button.mt-10.btn.btn-warning(ng-click='main.updateHours(day, true)') Closed on {{day.day_of_the_week | uppercase}}
-
                             hr
 
 

@@ -20,6 +20,11 @@ export class authDataService {
         this.business = vendorDataService.business;
     }
 
+    //auth status
+    authStatus(){
+        return this.$cookies.get('token');
+    }
+
     //existing account login
     loginAccount(data) {
         let defer = this.$q.defer();

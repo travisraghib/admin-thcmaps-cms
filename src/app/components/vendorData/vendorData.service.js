@@ -23,22 +23,28 @@ export class vendorDataService {
     }
     //get cached business array
     getVendorList (){
-        let vendorList = this.sessionStorageService.getData('business');
+        return this.businessResource.get().$promise
+            .then(data=>{
+                let vendorList = data.business;
 
-        if(!vendorList.length) {
-            return [];
-        }
+                if(!vendorList){
+                    return [];
+                }
 
-        return this.vendorResource.query({vendorList}).$promise
-            .then(data => {
-                console.log(data);
-                return data;
+                return this.vendorResource.query({vendorList}).$promise
+                    .then(data => {
+                        console.log(data);
+                        return data;
+                    })
+                    .catch((error) => {
+                        this.error('XHR Failed for getVendorList.\n' + angular.toJson(error.data, true));
+                        return error;
+                    });
             })
             .catch((error) => {
                 this.error('XHR Failed for getVendorList.\n' + angular.toJson(error.data, true));
                 return error;
             });
-
     }
 
     //cache business array

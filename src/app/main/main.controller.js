@@ -1,5 +1,5 @@
 export class MainController {
-    constructor($log, $stateParams, $scope, $timeout, vendorData, vendorDataService, constants, _, moment, Upload, formFieldService, google, geocoderService) {
+    constructor($log, $stateParams, vendorData, vendorDataService, constants, _, moment, Upload, formFieldService, google, geocoderService) {
         'ngInject';
 
         var vendor = vendorData;
@@ -15,7 +15,6 @@ export class MainController {
         this.Upload = Upload;
         this.id = $stateParams.id;
         this.moment = moment;
-        this.timeout = $timeout;
 
         //view bound data
         this.vendor = vendor;
@@ -36,8 +35,11 @@ export class MainController {
 
         //formly
         this.slugFormField = formFieldService.slugFormField();
-        this.nameFormField = formFieldService.nameFormField;
-        this.addressFormField = formFieldService.addressFormField;
+        this.nameFormField = formFieldService.nameFormField();
+        this.addressFormField = formFieldService.addressFormField();
+
+        //admin info
+        this.lastUpdate = new moment(new Date(vendorData.updated_at)).format('MM/DD/YYYY h:mm A');
     }
 
     //edit name
@@ -250,6 +252,7 @@ export class MainController {
 
     }
 
+    //update address
     updateAddress(loc) {
         let address = {
             address     : this.vendor.address,
@@ -292,7 +295,7 @@ export class MainController {
             has_lounge          : this.vendor.has_lounge,
             has_security_guard  : this.vendor.has_security_guard,
             has_testing         : this.vendor.has_testing,
-            accepts_credit_cards: this.vendor.accepts_credit_cardsf
+            accepts_credit_cards: this.vendor.accepts_credit_cards
         };
         this.update(ammenities);
     }

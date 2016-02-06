@@ -1,5 +1,5 @@
 export class vendorDataService {
-    constructor($log, $resource, $q, sessionStorageService) {
+    constructor($log, $resource, $q, sessionStorageService, _) {
         'ngInject';
 
         //debug
@@ -7,10 +7,12 @@ export class vendorDataService {
         this.error = $log.error;
 
         //deps
+        this._ = _;
         this.$q = $q;
         this.sessionStorageService = sessionStorageService;
 
         //resources
+        this.uniqueStatusResource = $resource('api/vendor/unique/:slug');
         this.vendorResource = $resource('api/vendor/:vendor');
         this.vendorUpdateResource = $resource('api/vendor/:vendor', null, {update: {method: 'PUT'}});
 
@@ -21,6 +23,11 @@ export class vendorDataService {
 
         this.business = this.getBusiness();
     }
+    //check status of given url
+    getUniqueStatus(slug){
+        return this.uniqueStatusResource.get({slug}).$promise
+    }
+
     //get cached business array
     getVendorList (){
         return this.businessResource.get().$promise
@@ -33,7 +40,7 @@ export class vendorDataService {
 
                 return this.vendorResource.query({vendorList}).$promise
                     .then(data => {
-                        console.log(data);
+                        this.log(data);
                         return data;
                     })
                     .catch((error) => {
@@ -54,7 +61,7 @@ export class vendorDataService {
     }
 
     //get cached business array
-    getBusiness (data){
+    getBusiness (){
         return this.sessionStorageService.getData('business') || [];
     }
 
@@ -67,7 +74,7 @@ export class vendorDataService {
                 return res;
             })
             .catch(error => {
-                console.log(error);
+                this.log(error);
             });
     }
 

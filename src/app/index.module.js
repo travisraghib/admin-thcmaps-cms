@@ -1,4 +1,4 @@
-/* global moment:false _:false */
+/* global moment:false _:false google:false */
 
 import { config } from './index.config';
 import { routerConfig } from './index.route';
@@ -15,16 +15,18 @@ import { MongooseErrorDirective } from './components/mongooseError/MongooseError
 import { vendorDataService } from './components/vendorData/vendorData.service';
 import { authDataService } from './components/authData/authData.service';
 import { sessionStorageService } from './components/sessionStorage/sessionStorage.service';
-import { tokenService  } from './components/token/token.service';
-import { interceptorService  } from './components/interceptor/interceptor.service';
-import { UtilService  } from './components/util/util.service';
+import { tokenService } from './components/token/token.service';
+import { interceptorService } from './components/interceptor/interceptor.service';
+import { formFieldService } from './components/formly/formField.service';
+import { geocoderService } from './components/geocoder/geocoder.service';
 
 import { constants } from './index.constants';
 
 angular.module('thcmaps-cms', ['ngAnimate', 'ngFileUpload', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngMessages',
-                               'ngResource', 'ui.router', 'ui.bootstrap'])
+                               'ngResource', 'ui.router', 'ui.bootstrap', 'formly', 'formlyBootstrap'])
     .constant('moment', moment)
     .constant('_', _)
+    .constant('google', google)
     .constant('constants', constants)
     .config(config)
     .config(routerConfig)
@@ -36,7 +38,8 @@ angular.module('thcmaps-cms', ['ngAnimate', 'ngFileUpload', 'ngCookies', 'ngTouc
     .service('sessionStorageService', sessionStorageService)
     .service('vendorDataService', vendorDataService)
     .service('authDataService', authDataService)
-    .service('util', UtilService)
+    .service('formFieldService', formFieldService)
+    .service('geocoderService', geocoderService)
 
     .controller('SelectController', SelectController)
     .controller('LoginController', LoginController)

@@ -3,7 +3,7 @@ export function MenuTabDirective() {
 
     let directive = {
         restrict        : 'E',
-        templateUrl     : 'app/components/menuTab/menuTab.html',
+        templateUrl     : 'app/components/menuTab/menutab.html',
         controller      : MenutabController,
         controllerAs    : 'menu',
         bindToController: {

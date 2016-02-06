@@ -6,12 +6,13 @@ export class SelectController {
         this.error = $log.error;
 
         //deps
+        this._ = _;
         this.$state = $state;
         this.vendorDataService = vendorDataService;
 
+
         //view template data
         this.vendorList = vendorList;
-        console.log(vendorList);
     }
 
     //create new business
@@ -21,7 +22,8 @@ export class SelectController {
                 let _id = data._id;
                 this.vendorList.unshift({_id});
             })
-            .catch(err =>{
+            .catch(error =>{
+                this.log(error);
                 //this.$state.go('login')
             })
     }
@@ -30,14 +32,17 @@ export class SelectController {
     deleteBusiness(id) {
         this.log(id);
         this.vendorDataService.deleteBusiness(id)
-            .then(data => {
-                _.forEach(this.vendorList, (vendor, index )=>{
+            .then((data) => {
+                this._.forEach(this.vendorList, (vendor, index )=>{
                     this.log(vendor);
                     if(vendor._id === id){
                         this.vendorList.splice(index, 1);
                         return false;
                     }
-                })
+                });
+            })
+            .catch((error) => {
+                this.log(error);
             })
     }
 }

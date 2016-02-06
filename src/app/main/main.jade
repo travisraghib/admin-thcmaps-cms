@@ -1,7 +1,7 @@
 .container
     navbar
     uib-tabset.pt-40.mt-40.col-xs-12.col-md-6.col-md-offset-3
-        uib-tab(heading='Menu' active='true')
+        uib-tab(heading='Menu')
             menu-tab(data='main.menu' template='main.menuItemTemplate')
         uib-tab(heading='Facility')
             .row.mt-20
@@ -37,10 +37,48 @@
                     a(ng-click='main.editAmmenities()' ng-hide='main.ammenitiesRevertData') edit
                     button.btn.btn-primary(ng-click='main.updateAmmenities()' ng-show='main.ammenitiesRevertData') Save
                     button.btn.btn-danger(ng-click='main.cancelEditAmmenities()' ng-show='main.ammenitiesRevertData') Cancel
-        uib-tab(heading='General')
-            .row.mt-20
+        uib-tab(heading='General' active='true')
+            form.row.mt-20
                 .col-xs-12
-                    h2 Vendor Avatar Image
+                    h3 Vendor Status:
+                        span.ml-10(ng-show='main.vendor._published') Published
+                        span.ml-10(ng-hide='main.vendor._published') Not Published
+                    button.btn.btn-success(ng-click='main.publish()' ng-show='!main.vendor._published') Publish
+                    button.btn.btn-danger(ng-click='main.unPublish()' ng-show='main.vendor._published' ) Unpublish
+            hr
+            .row
+                .col-xs-12
+                    h4 Vendor URL: thcmaps.com/v/
+                        span.text-danger.ml-5(ng-hide='main.vendor._slug') no url selected
+                        span.ml-5(ng-show='main.vendor._slug') {{main.vendor._slug}}
+                    a(ng-hide='main.editing === "slug"' ng-click='main.editSlug()') edit
+                    .form-group.mt-20(ng-show='main.editing === "slug"')
+                        form(name='main.vendorSlugForm' ng-submit='main.updateSlug()')
+                            formly-form(model='main.vendor' fields='main.slugFormField')
+                            p.small.text-danger(ng-if='main.vendorSlugForm.$error.url') Please use only lowercase letters A-Z - and _ are allowed
+                            p.small.text-danger(ng-if='main.vendorSlugForm.$error.isUnique') Sorry - This URL is already being used
+                                .row.mt-20
+                                    .col-xs-12
+                                        button.btn.btn-primary(type='submit' ng-disabled='main.vendorSlugForm.$invalid') Save
+                                        .btn.btn-danger(ng-click='main.cancelEditSlug()') Cancel
+            hr
+            .row
+                .col-xs-12
+                    h4 Vendor Name: {{main.vendor.name}}
+                        span.ml-10.glyphicon.glyphicon-question-sign(uib-tooltip='Names must be less than 60 character and can only contain alphabet characters')
+                    a(ng-hide='main.editing === "name"' ng-click='main.editName()') edit
+                    .form-group.mt-20(ng-show='main.editing === "name"')
+                        form(name='main.vendorNameForm' ng-submit='main.updateName()')
+                            formly-form(model='main.vendor' fields='main.nameFormField')
+                            p.small.text-danger(ng-if='main.vendorNameForm.$error.alpha') Please only use characters A-Z
+                            .row.mt-20
+                                .col-xs-12
+                                    button.btn.btn-primary(type='submit' ng-disabled='main.vendorNameForm.$invalid') Save
+                                    button.btn.btn-danger(ng-click='main.cancelEditName()') Cancel
+            hr
+            .row
+                .col-xs-12
+                    h4 Vendor Avatar Image
                     img.mb-10.block(ng-src='{{main.vendor.avatar_url}}')
                     a(ng-click='main.editing = "avatar"' ng-hide='main.editing === "avatar"') edit
                 .row(ng-show='main.editing === "avatar"')
@@ -50,18 +88,6 @@
                         .alert.alert-danger.mt-10(role='alert' ng-if='main.avatarError')  {{main.avatarError.$error}}
                         p.text-danger.mt-10(ng-if='main.avatarErrorMsg') {{main.avatarErrorMsg.$error}}
                         .progress-striped.active.mt-10(uib-progressbar value='main.avatarProgress' ng-show='main.uploadingAvatar')
-            hr
-            .row
-                .col-xs-12
-                    h2(ng-hide='main.editing === "name"') {{main.vendor.name}}
-                    a(ng-hide='main.editing === "name"' ng-click='main.editing = "{{main.vendor.name}}"') edit
-                    .form-group.mt-20(ng-show='main.editing === "{{main.vendor.name}}"')
-                        label Vendor Name
-                        input.form-control(ng-model='main.vendor.name')
-                        .row.mt-20
-                            .col-xs-12
-                        button.btn.btn-primary(ng-click='main.updateName(main.vendor.name)') Save
-                        button.btn.btn-danger(ng-click='main.editing = ""') Cancel
             hr
             .row
                 .col-xs-12
@@ -92,25 +118,11 @@
                         h5.mt-20 Phone Number:
                         p {{main.vendor.phone_number}}
                         a(ng-click='main.editAddress()') edit
-
                     .address-form(ng-show='main.addressRevertData')
-                        .form-group
-                            label Address
-                            input.form-control(ng-model='main.vendor.address')
-                        .form-group
-                            label City
-                            input.form-control(ng-model='main.vendor.city')
-                        .form-group
-                            label State
-                            input.form-control(ng-model='main.vendor.state')
-                        .form-group
-                            label Zip Code
-                            input.form-control(ng-model='main.vendor.zip_code')
-                        .form-group
-                            label Phone Number
-                            input.form-control(ng-model='main.vendor.phone_number')
-                        button.btn.btn-primary(ng-click='main.updateAddress()') Save
-                        button.btn.btn-danger(ng-click='main.cancelEditAddress()') Cancel
+                        form(name='main.addressForm' ng-submit='main.getCoords()')
+                            formly-form(model='main.vendor' fields='main.addressFormField')
+                            button.btn.btn-primary(type='submit' ng-disabled='main.addressForm.$invalid') Savez
+                            .btn.btn-danger(ng-click='main.cancelEditAddress()') Cancel
             hr
             .row
                 .col-xs-12

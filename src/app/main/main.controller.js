@@ -245,7 +245,7 @@ export class MainController {
         this.geocoderService.geocode(where)
             .then(this.updateAddress.bind(this))
             .catch((error)=> {
-                console.log(error);
+                this.log(error);
             })
 
     }

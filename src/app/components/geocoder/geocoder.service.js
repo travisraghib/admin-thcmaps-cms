@@ -12,13 +12,13 @@ export class geocoderService {
         let defer = this.$q.defer();
 
         this.geocoder.geocode(where, function(results, status) {
-            if (status === google.maps.GeocoderStatus.OK) {
+            if (status === this.google.maps.GeocoderStatus.OK) {
                 let lat = results[0].geometry.location.lat(),
                     lng = results[0].geometry.location.lng();
                 defer.resolve({lat, lng});
             } else {
                 defer.reject(status);
-                console.log("Geocode was not successful for the following reason: " + status);
+                this.log("Geocode was not successful for the following reason: " + status);
             }
         });
 

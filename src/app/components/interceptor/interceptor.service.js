@@ -1,5 +1,5 @@
 export class interceptorService {
-    constructor($rootScope, $q, $cookies, $injector, $log, util) {
+    constructor($rootScope, $q, $cookies, $injector, $log) {
         'ngInject';
         //debug
         this.log = $log.log;
@@ -9,7 +9,6 @@ export class interceptorService {
         this.$q = $q;
         this.$cookies = $cookies;
         this.$injector = $injector;
-        this.util = util;
 
         //private
         let state = null;
@@ -27,21 +26,13 @@ export class interceptorService {
 
         // Intercept 401s and redirect you to login
         this.responseError = function(response) {
-            console.log(30)
             if(response.status === 401) {
-                console.log(32);
                 (state || (state = $injector.get('$state'))).go('login');
                 // remove any stale tokens
-                console.log(35);
                 $cookies.remove('token');
             }
 
             return $q.reject(response);
         };
     }
-
-
-
-
-
 }

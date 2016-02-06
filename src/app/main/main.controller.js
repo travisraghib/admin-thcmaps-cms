@@ -1,14 +1,15 @@
 export class MainController {
-    constructor($log, $stateParams, $scope, $timeout, vendorData, vendorDataService, constants, _, moment, Upload) {
+    constructor($log, $stateParams, $scope, $timeout, vendorData, vendorDataService, constants, _, moment, Upload, formFieldService, google, geocoderService) {
         'ngInject';
 
-        var vendor   = vendorData;
+        var vendor = vendorData;
 
         //debug
         this.log = $log.log;
         this.error = $log.error;
 
-        //dependancies
+        //deps
+        this.geocoderService = geocoderService;
         this._ = _;
         this.vendorDataService = vendorDataService;
         this.Upload = Upload;
@@ -30,6 +31,27 @@ export class MainController {
         this.addressRevertData = '';
         this.ammenitiesRevertData = '';
         this.hoursRevertData = '';
+        this.slugRevertData = '';
+        this.nameRevertData = '';
+
+        //formly
+        this.slugFormField = formFieldService.slugFormField();
+        this.nameFormField = formFieldService.nameFormField;
+        this.addressFormField = formFieldService.addressFormField;
+    }
+
+    //edit name
+    editName() {
+        this.editing = 'name';
+        this.nameRevertData = this.vendor.name;
+    }
+
+    //cancel edit name
+    cancelEditName() {
+        this.vendor.name = this.nameRevertData;
+        this.editing = '';
+        this.nameRevertData = '';
+
     }
 
     //edit hours
@@ -180,6 +202,28 @@ export class MainController {
         this.editing = '';
     }
 
+    //edit slug
+    editSlug() {
+        this.editing = 'slug';
+        this.slugRevertData = this.vendor._slug;
+    }
+
+    //cancel edit slug
+    cancelEditSlug() {
+        this.editing = '';
+        this.vendor._slug = this.slugRevertData;
+    }
+
+    //publish
+    publish() {
+        this.update({'_published': true});
+    }
+
+    //unpublish
+    unPublish() {
+        this.update({'_published': false});
+    }
+
     //update vendor name
     updateName() {
         let name = {name: this.vendor.name};
@@ -193,15 +237,30 @@ export class MainController {
     }
 
     //update vendor address
-    updateAddress() {
-        let address = {
-                address     : this.vendor.address,
-                city        : this.vendor.city,
-                state       : this.vendor.state,
-                zip_code    : this.vendor.zip_code,
-                phone_number: this.vendor.phone_number
+    getCoords() {
+        let where = {
+            address: this.vendor.address + ' ' + this.vendor.zip_code
         };
-        this.update(address)
+
+        this.geocoderService.geocode(where)
+            .then(this.updateAddress.bind(this))
+            .catch((error)=> {
+                console.log(error);
+            })
+
+    }
+
+    updateAddress(loc) {
+        let address = {
+            address     : this.vendor.address,
+            city        : this.vendor.city,
+            state       : this.vendor.state,
+            zip_code    : this.vendor.zip_code,
+            phone_number: this.vendor.phone_number,
+            loc
+        };
+
+        this.update(address);
     }
 
     //update business hours
@@ -227,16 +286,22 @@ export class MainController {
     //update facility ammenties
     updateAmmenities() {
         let ammenities = {
-                eighteen_plus       : this.vendor.eighteen_plus,
-                twenty_one_plus     : this.vendor.twenty_one_plus,
-                has_handicap_access : this.vendor.has_handicap_access,
-                has_lounge          : this.vendor.has_lounge,
-                has_security_guard  : this.vendor.has_security_guard,
-                has_testing         : this.vendor.has_testing,
-                accepts_credit_cards: this.vendor.accepts_credit_cardsf
+            eighteen_plus       : this.vendor.eighteen_plus,
+            twenty_one_plus     : this.vendor.twenty_one_plus,
+            has_handicap_access : this.vendor.has_handicap_access,
+            has_lounge          : this.vendor.has_lounge,
+            has_security_guard  : this.vendor.has_security_guard,
+            has_testing         : this.vendor.has_testing,
+            accepts_credit_cards: this.vendor.accepts_credit_cardsf
         };
         this.update(ammenities);
     }
+
+    //update slug
+    updateSlug() {
+        this.update({_slug: this.vendor._slug})
+    }
+
 
     //update method for whole controller
     update(data) {

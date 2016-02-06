@@ -9,10 +9,11 @@ export class geocoderService {
 
     }
     geocode (where){
-        let defer = this.$q.defer();
+        let defer = this.$q.defer(),
+            google = this.google;
 
         this.geocoder.geocode(where, function(results, status) {
-            if (status === this.google.maps.GeocoderStatus.OK) {
+            if (status === google.maps.GeocoderStatus.OK) {
                 let lat = results[0].geometry.location.lat(),
                     lng = results[0].geometry.location.lng();
                 defer.resolve({lat, lng});

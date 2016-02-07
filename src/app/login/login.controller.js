@@ -1,5 +1,5 @@
 export class LoginController {
-    constructor($log, authDataService, sessionStorageService) {
+    constructor($log, authDataService, sessionStorageService, formFieldService) {
         'ngInject';
         //debug
         this.log = $log.log;
@@ -10,10 +10,13 @@ export class LoginController {
         this.sessionStorageService = sessionStorageService;
         //form data
         this.model = {
-            name : null,
+            name : '',
             email   : '',
             password: ''
         };
+
+        this.loginFormField = formFieldService.loginFormField();
+        this.createFormField = formFieldService.createFormField();
     }
 
     //create ui interaction
@@ -35,8 +38,8 @@ export class LoginController {
         this.authDataService.loginAccount(data)
         .then((res)=>{
             this.log(res);
-        }, (error)=>{
-            this.log(error)
+        }, ()=>{
+            this.invalidCredentials = true;
         });
     }
 

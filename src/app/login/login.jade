@@ -1,36 +1,20 @@
 navbar
-.container.login-page
+.container.login-page.pt-40
     .row.mt-40
-        .col-xs-offset-3.col-xs-6
+        .col-xs-12.col-md-6.col-md-offset-3
             uib-tabset(type='pills')
                 uib-tab(heading='Login')
                     hr
-                    //h4.text-danger Invalid Credentials
-                    .form-group.mt-20
-                        label Email*
-                        //span.block.text-danger.small Please enter a valid Email address
-                        input.form-control(ng-model='login.model.email' required name='email')
-                    .form-group.mt-20
-                        label Password*
-                        //span.block.text-danger.small(ng-show='login') Minimum Password Length is 10 characters
-                        input.form-control(ng-model='login.model.password' type='password' required name='password')
-                    .pull-right
-                        btn.btn.btn-primary(ng-click='login.login()') LOGIN
-                uib-tab(heading='Create account')
-                    hr
-                    .form-group.mt-20
-                        label Name*
-                        //span.block.text-danger.small Please enter a name
-                        input.form-control(ng-model='login.model.name' required name='name')
-                    //h4.text-danger Invalid Credentials
-                    .form-group.mt-20
-                        label Email*
-                        //span.block.text-danger.small Please enter a valid Email address
-                        input.form-control(ng-model='login.model.email' required name='email')
-                    .form-group.mt-20
-                        label Password*
-                        //span.block.text-danger.small(ng-show='login') Minimum Password Length is 10 characters
-                        input.form-control(ng-model='login.model.password' type='password' required name='password')
-                    .pull-right
-                        btn.btn.btn-danger(ng-click='login.create()') CREATE NEW ACCOUNT
+                    h4.text-danger(ng-show='login.invalidCredentials') Invalid Credentials
+                    span.block.text-danger.small(ng-show='login.loginForm.$error.email') Please enter a valid Email address
 
+                    form(name='login.loginForm' ng-submit='login.login()')
+                        formly-form(model='login.model' fields='login.loginFormField')
+                        .pull-right
+                            btn.btn.btn-primary(ng-click='login.login()' ng-disabled='login.loginForm.$invalid') LOGIN
+                uib-tab(heading='Create account' active='true')
+                    hr
+                    form(name='login.createForm' ng-submit='loginCreate()')
+                        formly-form(model='login.model' fields='login.createFormField')
+                        .pull-right
+                            btn.btn.btn-danger(ng-disabled='login.createForm.$invalid') CREATE NEW ACCOUNT

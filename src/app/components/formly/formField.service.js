@@ -164,4 +164,98 @@ export class formFieldService {
         ];
 
     }
+
+    //login form field
+    loginFormField(){
+        return [{
+            key : 'email',
+            type : 'input',
+            templateOptions : {
+                label: 'Email Address',
+                required: true,
+                type: 'email'
+            }
+
+        },
+        {
+            key : 'password',
+            type : 'input',
+            templateOptions : {
+                label: 'Password',
+                required: true,
+                type : 'password'
+            }
+        }]
+    }
+
+    //new account form field
+    createFormField(){
+        return [
+            //name field
+            {
+                key : 'name',
+                type : 'input',
+                templateOptions : {
+                    label: 'Name',
+                    required: true
+                },
+
+                validators     : {
+                    alpha: ($viewValue, $modelValue) => {
+                        let value = $modelValue || $viewValue;
+                        if(value.length > 1 && value.length < 60) {
+                            return /^[a-zA-Z ]*$/.test(value);
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+            },
+            //name error msg
+            {
+                template: '<p class="text-danger"> Please enter a valid name</p>',
+                hideExpression: function($viewValue, $modelValue, scope) {
+                    let error = scope.theFormlyForm.$error.alpha;
+                    return (error && error[0].$dirty) ? false : true;
+                }
+
+            },
+            //email field
+            {
+                key : 'email',
+                type : 'input',
+                templateOptions : {
+                    label: 'Email Address',
+                    required: true,
+                    type: 'email'
+                }
+
+            },
+            //email error message
+            {
+                template: '<p class="text-danger"> Please enter a valid Email address {{$modelValue |json}}</p>',
+                hideExpression: function($viewValue, $modelValue, scope) {
+                    return !scope.theFormlyForm.$error.email;
+                }
+
+            },
+            {
+                key : 'password',
+                type : 'input',
+                templateOptions : {
+                    label: 'Password',
+                    required: true,
+                    type : 'password',
+                    minlength: 5
+                }
+            },
+            {
+                template: '<p class="text-danger"> Please enter a valid password</p>',
+                hideExpression: function($viewValue, $modelValue, scope) {
+                    return !scope.theFormlyForm.$error.minlength;;
+                }
+
+            }
+        ];
+    }
 }

@@ -1,5 +1,9 @@
-.container
-    navbar
+navbar
+.container.pt-40
+    .jumbotron.mt-40
+        p last update : {{main.lastUpdate}}
+        a(ui-sref='select') Back
+
     uib-tabset.pt-40.mt-40.col-xs-12.col-md-6.col-md-offset-3
         uib-tab(heading='Menu')
             menu-tab(data='main.menu' template='main.menuItemTemplate')
@@ -60,7 +64,7 @@
                                 .row.mt-20
                                     .col-xs-12
                                         button.btn.btn-primary(type='submit' ng-disabled='main.vendorSlugForm.$invalid') Save
-                                        .btn.btn-danger(ng-click='main.cancelEditSlug()') Cancel
+                                        button.btn.btn-danger(ng-click='main.cancelEditSlug()' type='button') Cancel
             hr
             .row
                 .col-xs-12
@@ -74,7 +78,7 @@
                             .row.mt-20
                                 .col-xs-12
                                     button.btn.btn-primary(type='submit' ng-disabled='main.vendorNameForm.$invalid') Save
-                                    button.btn.btn-danger(ng-click='main.cancelEditName()') Cancel
+                                    button.btn.btn-danger(ng-click='main.cancelEditName()' type='button') Cancel
             hr
             .row
                 .col-xs-12
@@ -84,7 +88,7 @@
                 .row(ng-show='main.editing === "avatar"')
                     .col-xs-12.pa-20
                         button.btn.btn-success(type='file', ngf-select='main.onAvatarFileSelect($file, $invalidFiles)', accept='image/*', ngf-max-height='1000', ngf-max-size='1MB') Select File
-                        button.btn.btn-danger.ml-10(ng-click='main.editing = ""') Cancel
+                        button.btn.btn-danger.ml-10(ng-click='main.editing = ""' type='button') Cancel
                         .alert.alert-danger.mt-10(role='alert' ng-if='main.avatarError')  {{main.avatarError.$error}}
                         p.text-danger.mt-10(ng-if='main.avatarErrorMsg') {{main.avatarErrorMsg.$error}}
                         .progress-striped.active.mt-10(uib-progressbar value='main.avatarProgress' ng-show='main.uploadingAvatar')
@@ -103,7 +107,7 @@
                                 input(type='radio' name='type' value='delivery' ng-model='main.type')
                                 | Delivery
                         button.btn.btn-primary(ng-click='main.updateType()') Save
-                        button.btn.btn-danger(ng-click='main.cancelEditType()') Cancel
+                        button.btn.btn-danger(ng-click='main.cancelEditType()' type='button') Cancel
 
                     a(ng-hide='main.editing === "type"' ng-click='main.editing = "{{main.type}}"') edit
             hr
@@ -121,8 +125,8 @@
                     .address-form(ng-show='main.addressRevertData')
                         form(name='main.addressForm' ng-submit='main.getCoords()')
                             formly-form(model='main.vendor' fields='main.addressFormField')
-                            button.btn.btn-primary(type='submit' ng-disabled='main.addressForm.$invalid') Savez
-                            .btn.btn-danger(ng-click='main.cancelEditAddress()') Cancel
+                            button.btn.btn-primary(type='submit' ng-disabled='main.addressForm.$invalid') Save
+                            .btn.btn-danger(ng-click='main.cancelEditAddress()' type='button') Cancel
             hr
             .row
                 .col-xs-12
@@ -144,17 +148,6 @@
                                     uib-timepicker.ma-0(ng-show='day.when === "open"' ng-model='day.open')
                                     uib-timepicker(ng-show='day.when === "close"' ng-model='day.close')
                                     button.mt-10.btn.btn-primary(ng-click='main.updateHours(day)') Save
-                                    button.mt-10.btn.btn-danger(ng-click='main.cancelEditHours(day)') Cancel
+                                    button.mt-10.btn.btn-danger(ng-click='main.cancelEditHours(day)' type='button') Cancel
                                     button.mt-10.btn.btn-warning(ng-click='main.updateHours(day, true)') Closed on {{day.day_of_the_week | uppercase}}
                             hr
-
-
-
-
-
-
-
-
-
-
-

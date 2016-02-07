@@ -1,5 +1,5 @@
 export class MainController {
-    constructor($log, $stateParams, vendorData, vendorDataService, constants, _, moment, Upload, formFieldService, google, geocoderService) {
+    constructor($log, $stateParams, vendorData, vendorDataService, constants, _, moment, Upload, formFieldService, geocoderService) {
         'ngInject';
 
         var vendor = vendorData;

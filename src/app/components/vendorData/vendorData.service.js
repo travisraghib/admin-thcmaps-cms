@@ -12,7 +12,7 @@ export class vendorDataService {
         this.sessionStorageService = sessionStorageService;
 
         //resources
-        this.uniqueStatusResource = $resource('api/vendor/unique/:slug');
+        this.uniqueStatusResource = $resource('api/service/unique/:slug');
         this.vendorResource = $resource('api/vendor/:vendor');
         this.vendorUpdateResource = $resource('api/vendor/:vendor', null, {update: {method: 'PUT'}});
 
@@ -40,7 +40,6 @@ export class vendorDataService {
 
                 return this.vendorResource.query({vendorList}).$promise
                     .then(data => {
-                        this.log(data);
                         return data;
                     })
                     .catch((error) => {

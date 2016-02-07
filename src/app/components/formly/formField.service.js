@@ -252,7 +252,7 @@ export class formFieldService {
             {
                 template: '<p class="text-danger"> Please enter a valid password</p>',
                 hideExpression: function($viewValue, $modelValue, scope) {
-                    return !scope.theFormlyForm.$error.minlength;;
+                    return !scope.theFormlyForm.$error.minlength;
                 }
 
             }

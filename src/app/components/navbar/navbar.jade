@@ -1,12 +1,12 @@
 nav.navbar.navbar-default.navbar-fixed-top
     .container-fluid
         .navbar-header
-            button.navbar-toggle.collapsed(type='button', data-toggle='collapse', ng-click='nav.isCollapsed = !nav.isCollapsed')
+            a.navbar-brand(href='/')
+                img(src='assets/images/thcmaps.png')
+            //-button.navbar-toggle.collapsed(type='button', data-toggle='collapse', ng-click='nav.isCollapsed = !nav.isCollapsed')
                 span.sr-only Toggle navigation
                 span.glyphicon.glyphicon-align-justify
-            a.navbar-brand(href='/')
-                //-img(src='assets/images/thcmaps.png')
-        .collapse.navbar-collapse(uib-collapse='nav.isCollapsed')
+        //-.collapse.navbar-collapse(uib-collapse='nav.isCollapsed')
             ul.nav.navbar-nav.navbar-left
                 li
                     a(ui-sref='select') Back

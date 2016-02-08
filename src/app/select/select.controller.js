@@ -33,7 +33,6 @@ export class SelectController {
         this.vendorDataService.deleteBusiness(id)
             .then(() => {
                 this._.forEach(this.vendorList, (vendor, index )=>{
-                    this.log(vendor);
                     if(vendor._id === id){
                         this.vendorList.splice(index, 1);
                         return false;

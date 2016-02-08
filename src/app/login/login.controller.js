@@ -1,5 +1,5 @@
 export class LoginController {
-    constructor($log, authDataService, sessionStorageService, formFieldService) {
+    constructor($log, authDataService, formFieldService) {
         'ngInject';
         //debug
         this.log = $log.log;
@@ -7,7 +7,6 @@ export class LoginController {
 
         //dependancies
         this.authDataService = authDataService;
-        this.sessionStorageService = sessionStorageService;
         //form data
         this.model = {
             name : '',

@@ -15,11 +15,12 @@ export class vendorDataService {
         this.uniqueStatusResource = $resource('api/service/unique/:slug');
         this.vendorResource = $resource('api/vendor/:vendor');
         this.vendorUpdateResource = $resource('api/vendor/:vendor', null, {update: {method: 'PUT'}});
-
         this.menuResource = $resource('api/vendor/menu/:vendor/:itemId');
         this.menuUpdateResource = $resource('api/vendor/menu/:vendor', null, {update: {method: 'PUT'}});
-
         this.businessResource = $resource('api/user/business/:id');
+
+        //local
+        this.business = [];
     }
     //check status of given url
     getUniqueStatus(slug){
@@ -56,7 +57,6 @@ export class vendorDataService {
         return this.businessResource.save().$promise
             .then(res =>{
                 this.business.unshift(res._id);
-                this.setBusiness(this.business);
                 return res;
             })
             .catch(error => {

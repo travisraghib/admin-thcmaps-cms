@@ -20,8 +20,6 @@ export class vendorDataService {
         this.menuUpdateResource = $resource('api/vendor/menu/:vendor', null, {update: {method: 'PUT'}});
 
         this.businessResource = $resource('api/user/business/:id');
-
-        this.business = this.getBusiness();
     }
     //check status of given url
     getUniqueStatus(slug){
@@ -51,17 +49,6 @@ export class vendorDataService {
                 this.error('XHR Failed for getVendorList.\n' + angular.toJson(error.data, true));
                 return error;
             });
-    }
-
-    //cache business array
-    setBusiness (data){
-        this.sessionStorageService.setData('business', data);
-        this.business = data;
-    }
-
-    //get cached business array
-    getBusiness (){
-        return this.sessionStorageService.getData('business') || [];
     }
 
     //add a business method

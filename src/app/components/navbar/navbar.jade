@@ -3,6 +3,11 @@ nav.navbar.navbar-default.navbar-fixed-top
         .navbar-header
             a.navbar-brand(href='/')
                 img(src='assets/images/thcmaps.png')
+        ul.nav.navbar-nav.navbar-right(ng-show='nav.authStatus')
+            li
+                a(ng-click='nav.logOut()') logout
+
+
             //-button.navbar-toggle.collapsed(type='button', data-toggle='collapse', ng-click='nav.isCollapsed = !nav.isCollapsed')
                 span.sr-only Toggle navigation
                 span.glyphicon.glyphicon-align-justify

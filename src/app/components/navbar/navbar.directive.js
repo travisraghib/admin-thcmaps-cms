@@ -15,4 +15,14 @@ export function NavbarDirective() {
     return directive;
 }
 
-class NavbarController {}
+class NavbarController {
+    constructor(authDataService){
+        'ngInject';
+
+        this.authDataService = authDataService;
+        this.authStatus = !!authDataService.authStatus();
+    }
+    logOut(){
+        this.authDataService.logOut();
+    }
+}

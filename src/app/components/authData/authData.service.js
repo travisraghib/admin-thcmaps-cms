@@ -72,6 +72,13 @@ export class authDataService {
         this.tokenService.setToken(data);
     }
 
+    //signout
+    logOut(){
+        this.$cookies.remove('token');
+        this.$state.go('login');
+
+    }
+
     //goto select page
     next() {
         this.$state.go('select');

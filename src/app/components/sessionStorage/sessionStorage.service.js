@@ -8,7 +8,8 @@ export class sessionStorageService {
 
     //Getting local storage for search options
     getData(key) {
-        let str = sessionStorage.getItem(key);
+        let str = sessionStorage.getItem(key) || '{}';
+        str = (str) ? '{}': str;
         return angular.fromJson(str);
     }
 

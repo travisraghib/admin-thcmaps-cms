@@ -10,11 +10,11 @@ navbar
 
                     form(name='login.loginForm' ng-submit='login.login()')
                         formly-form(model='login.model' fields='login.loginFormField')
-                        .pull-right
-                            btn.btn.btn-primary(ng-click='login.login()' ng-disabled='login.loginForm.$invalid') LOGIN
-                uib-tab(heading='Create account' active='true')
+                            .pull-right
+                                button.btn.btn-primary(type='submit' ng-disabled='login.loginForm.$invalid') LOGIN
+                uib-tab(heading='Create account')
                     hr
-                    form(name='login.createForm' ng-submit='loginCreate()')
+                    form(name='login.createForm' ng-submit='login.create()')
                         formly-form(model='login.model' fields='login.createFormField')
-                        .pull-right
-                            btn.btn.btn-danger(ng-disabled='login.createForm.$invalid') CREATE NEW ACCOUNT
+                            .pull-right
+                                button.btn.btn-danger(type='submit' ng-disabled='login.createForm.$invalid') CREATE NEW ACCOUNT

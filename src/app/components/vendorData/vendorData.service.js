@@ -69,19 +69,19 @@ export class vendorDataService {
             return;
         }
 
-        let userPromise = this.businessResource.delete({id}).$promise,
-            vendorPromise = this.vendorResource.delete({vendor : id}).$promise,
-            defer = this.$q.defer();
-        this.$q.all([userPromise, vendorPromise])
-            .then(data =>{
-                defer.resolve(data[0].business);
+        return this.vendorResource.delete({vendor : id}).$promise
+            .then(() =>{
+                this.businessResource.delete({id}).$promise
+                    .then(data =>{
+                       return data;
+                    })
+                    .catch(error =>{
+                        return error;
+                    });
             })
             .catch(error =>{
-                defer.reject(error);
+                return error;
             });
-
-        return defer.promise;
-
     }
 
     //update menu data

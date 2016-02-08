@@ -59,7 +59,7 @@ export class authDataService {
             business = res.data.business;
 
         this.setJwt(token);
-        this.setBusiness(business);
+        this.business = business;
         this.$cookies.put('token', token);
         this.next();
 
@@ -70,12 +70,6 @@ export class authDataService {
     setJwt(data) {
         this.jwt = data;
         this.tokenService.setToken(data);
-    }
-
-    //set business array for business list
-    setBusiness(data) {
-        this.business = data;
-        this.vendorDataService.setBusiness(data);
     }
 
     //goto select page

@@ -260,7 +260,10 @@ export class MainController {
             state       : this.vendor.state,
             zip_code    : this.vendor.zip_code,
             phone_number: this.vendor.phone_number,
-            loc
+            loc         : {
+                lng: loc.lng,
+                lat: loc.lat
+            }
         };
 
         this.update(address);

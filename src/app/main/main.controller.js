@@ -32,14 +32,99 @@ export class MainController {
         this.hoursRevertData = '';
         this.slugRevertData = '';
         this.nameRevertData = '';
+        this.introRevertData = '';
 
         //formly
         this.slugFormField = formFieldService.slugFormField();
         this.nameFormField = formFieldService.nameFormField();
         this.addressFormField = formFieldService.addressFormField();
+        this.introFormField = formFieldService.introFormField();
 
         //admin info
         this.lastUpdate = new moment(new Date(vendorData.updated_at)).format('MM/DD/YYYY h:mm A');
+    }
+
+    //setup editable hours objects
+    setUpHours() {
+        this._.each(this.vendor.hours, (day) => {
+            //handle no open or close times
+            if(!day || !day.opening_time || !day.closing_time) {
+                day.open = new Date();
+                day.close = new Date();
+                day.closed = true;
+                return;
+            }
+            // create js time object from string
+            let openPeriod   = day && day.opening_time && day.opening_time.split(':')[1].slice(2, 4),
+                closePeriod  = day.closing_time.split(':')[1].slice(2, 4),
+                openHour     = (openPeriod.toLowerCase() === 'pm') ? Number(day.opening_time.split(':')[0]) + 12 : day.opening_time.split(':')[0],
+                openMinutes  = day.opening_time.split(':')[1].slice(0, 2),
+                closeHour    = (closePeriod.toLowerCase() === 'pm') ? Number(day.closing_time.split(':')[0]) + 12 : day.closing_time.split(':')[0],
+                closeMinutes = day.closing_time.split(':')[1].slice(0, 2),
+                open         = new Date(),
+                close        = new Date();
+            //set time
+            open.setHours(openHour);
+            close.setHours(closeHour);
+
+            open.setMinutes(openMinutes);
+            close.setMinutes(closeMinutes);
+            //set open close times for ui
+            day.open = open;
+            day.close = close;
+
+        }, this);
+        return this.vendor.hours;
+    }
+
+    //handle avatar file select
+    onAvatarFileSelect(file, invalidFiles) {
+        this.avatarErrorMsg = invalidFiles[0];
+        if(file) {
+            this.uploadingAvatar = true;
+            file.upload = this.Upload.upload({
+                url   : '/api/vendor/' + this.id + '/avatarimg',
+                data  : {file: file},
+                method: 'PUT'
+            });
+
+            file.upload
+                .then((response) => {
+                    //success
+                    file.result = response.data;
+                    this.log(response);
+                    this.vendor = response.data;
+                    this.hours = this.setUpHours();
+                    this.avatarProgress = 0;
+                    this.uploadingAvatar = false;
+                    this.editing = '';
+
+                }, (response) => {
+                    //error
+                    if(response.status > 0) {
+                        this.avatarErrorMsg = response.status + ': ' + response.data;
+                        this.uploadingAvatar = false;
+                        this.avatarProgress = 0;
+                    }
+                }, (evt)=> {
+                    //on data
+                    this.avatarProgress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                });
+        }
+    }
+
+    //update vendor address
+    getCoords() {
+        let where = {
+            address: this.vendor.address + ' ' + this.vendor.zip_code
+        };
+
+        this.geocoderService.geocode(where)
+            .then(this.updateAddress.bind(this))
+            .catch((error)=> {
+                this.log(error);
+            })
+
     }
 
     //edit name
@@ -73,39 +158,6 @@ export class MainController {
         let day = this.hoursRevertData;
         this.hours[day.day_order] = day;
         this.hoursRevertData = null;
-    }
-
-    //se    tup editable hours objects
-    setUpHours() {
-        this._.each(this.vendor.hours, (day) => {
-            //handle no open or close times
-            if(!day || !day.opening_time || !day.closing_time) {
-                day.open = new Date();
-                day.close = new Date();
-                day.closed = true;
-                return;
-            }
-            // create js time object from string
-            let openPeriod   = day && day.opening_time && day.opening_time.split(':')[1].slice(2, 4),
-                closePeriod  = day.closing_time.split(':')[1].slice(2, 4),
-                openHour     = (openPeriod.toLowerCase() === 'pm') ? Number(day.opening_time.split(':')[0]) + 12 : day.opening_time.split(':')[0],
-                openMinutes  = day.opening_time.split(':')[1].slice(0, 2),
-                closeHour    = (closePeriod.toLowerCase() === 'pm') ? Number(day.closing_time.split(':')[0]) + 12 : day.closing_time.split(':')[0],
-                closeMinutes = day.closing_time.split(':')[1].slice(0, 2),
-                open         = new Date(),
-                close        = new Date();
-            //set time
-            open.setHours(openHour);
-            close.setHours(closeHour);
-
-            open.setMinutes(openMinutes);
-            close.setMinutes(closeMinutes);
-            //set open close times for ui
-            day.open = open;
-            day.close = close;
-
-        }, this);
-        return this.vendor.hours;
     }
 
     //handle edit button for vendor ammenities
@@ -154,53 +206,9 @@ export class MainController {
         this.addressRevertData = '';
     }
 
-    //handle avatar file select
-    onAvatarFileSelect(file, invalidFiles) {
-        this.avatarErrorMsg = invalidFiles[0];
-        if(file) {
-            this.uploadingAvatar = true;
-            file.upload = this.Upload.upload({
-                url   : '/api/vendor/' + this.id + '/avatarimg',
-                data  : {file: file},
-                method: 'PUT'
-            });
-
-            file.upload
-                .then((response) => {
-                    //success
-                    file.result = response.data;
-                    this.log(response);
-                    this.vendor = response.data;
-                    this.hours = this.setUpHours();
-                    this.avatarProgress = 0;
-                    this.uploadingAvatar = false;
-                    this.editing = ""
-
-                }, (response) => {
-                    //error
-                    if(response.status > 0) {
-                        this.avatarErrorMsg = response.status + ': ' + response.data;
-                        this.uploadingAvatar = false;
-                        this.avatarProgress = 0;
-                    }
-                }, (evt)=> {
-                    //on data
-                    this.avatarProgress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-                });
-        }
-    }
-
-    //close edit form for page info
-    cancelEditPageInfo(field) {
-        this.vendor[field] = this.editing;
-
-        this.editing = '';
-    }
-
     //close edit form for vendor type
     cancelEditType() {
         this.type = this.editing;
-
         this.editing = '';
     }
 
@@ -216,6 +224,18 @@ export class MainController {
         this.vendor._slug = this.slugRevertData;
     }
 
+    //edit intro
+    editIntro(){
+        this.editing = 'intro';
+        this.introRevertData = this.vendor.intro_body;
+    }
+
+    //cancel edit intro
+    cancelEditIntro(){
+        this.editing = '';
+        //this.vendor.intro_body = this.introRevertData;
+    }
+
     //publish
     publish() {
         this.update({'_published': true});
@@ -224,6 +244,12 @@ export class MainController {
     //unpublish
     unPublish() {
         this.update({'_published': false});
+    }
+
+    //udate intro
+    updateIntro(){
+        let intro = {intro_body: this.vendor.intro_body}
+        this.update(intro);
     }
 
     //update vendor name
@@ -236,20 +262,6 @@ export class MainController {
     updateType() {
         let type = {_type: this.type};
         this.update(type);
-    }
-
-    //update vendor address
-    getCoords() {
-        let where = {
-            address: this.vendor.address + ' ' + this.vendor.zip_code
-        };
-
-        this.geocoderService.geocode(where)
-            .then(this.updateAddress.bind(this))
-            .catch((error)=> {
-                this.log(error);
-            })
-
     }
 
     //update address
@@ -307,7 +319,6 @@ export class MainController {
     updateSlug() {
         this.update({_slug: this.vendor._slug})
     }
-
 
     //update method for whole controller
     update(data) {

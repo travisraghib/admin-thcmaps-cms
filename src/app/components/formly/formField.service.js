@@ -165,6 +165,19 @@ export class formFieldService {
 
     }
 
+    //address form field
+    introFormField () {
+
+        return [{
+                key            : 'intro_body',
+                type           : 'textarea',
+                templateOptions: {
+                    label   : 'Intro text'
+                }
+            }];
+
+    }
+
     //login form field
     loginFormField(){
         return [{
